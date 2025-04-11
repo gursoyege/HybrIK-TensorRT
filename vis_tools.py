@@ -1,3 +1,5 @@
+# This is originally taken from https://github.com/Deep-Imaging-Group/SDSR-OCT/ and modified.
+
 import time
 import numpy as np
 import torch as t
