@@ -1,29 +1,28 @@
 import cv2 as cv
 import numpy as np
-from hybrik_inference import Hybrik, HybrikOnnx
+from hybrik_inference import Hybrik
 import time
 import torch
+from vis_tools import Visualizer
+from pysmpl.pysmpl import PySMPL
+from visdom import Visdom
 
 pose_model = Hybrik("./hybrik.engine", model_input_size=(256,256), device="cuda")
-#pose_model = HybrikOnnx("./hybrik.onnx", model_input_size=(256,256), device="cuda")
 
-img = cv.imread("human-pose.jpg")
-dets = np.array([[  0.75959396,   1.6419703,  212.80466,    339.2592    ]])
-shape, pose = pose_model(img, dets)
-# from vis_tools import Visualizer, PySMPL
-# smpl = PySMPL()
-# vis = Visualizer()
-# shape, pose = pose_model(img, dets)
-# mesh = smpl(torch.from_numpy(shape), torch.from_numpy(pose))
-# vis.show_points([mesh])
-# exit()
-
+smpl = PySMPL()
+vis = Visualizer()
 
 for i in range(1000):
     start_time = time.perf_counter()
     
+    img = cv.imread("human-pose.jpg")
+    dets = np.array([[  0.75959396,   1.6419703,  212.80466,    339.2592    ]])
     shape, pose = pose_model(img, dets + np.random.randint(-2,2))
-    end_time = time.perf_counter()
-    print(torch.isnan(torch.from_numpy(pose)).any())
+    shape_tensor = torch.from_numpy(shape).to(device="cuda")
+    pose_tensor = torch.from_numpy(pose).to(device="cuda")
 
-    print("Time: " + str((end_time - start_time)))
+    mesh = smpl(shape_tensor, pose_tensor, pose2rot=True)
+    # vis.show_points([mesh])   
+    
+    end_time = time.perf_counter()
+    print("Time: " + str((1/(end_time - start_time))))
