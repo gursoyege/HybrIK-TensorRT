@@ -9,7 +9,7 @@ import numpy as np
 import tensorrt as trt
 import pycuda.driver as cuda
 import pycuda.autoinit
-from pre_processings import bbox_xyxy2cs, top_down_affine
+from utils.pre_processings import bbox_xyxy2cs, top_down_affine
 import torch
 import roma
 def check_mps_support():

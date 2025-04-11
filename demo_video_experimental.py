@@ -10,7 +10,7 @@ import numpy as np
 import cv2
 from torch.cuda.amp import autocast
 from pysmpl.pysmpl import PySMPL
-from vis_tools import Visualizer
+from utils.vis_tools import Visualizer
 from ultralytics import YOLO
 
 INPUT_SHAPE = (256, 256)
@@ -95,8 +95,8 @@ def preprocess_frame_pinned(frame, pinned_buffer, bbox=None):
 def main():
     parser = argparse.ArgumentParser(description="HybrikTensorRT Optimized")
     parser.add_argument("--video-name", default="examples/dance.mp4")
-    parser.add_argument("--engine-path", default="hybrik.engine")
-    parser.add_argument("--detector-engine", default="yolo11n.engine")
+    parser.add_argument("--engine-path", default="engines/hybrik.engine")
+    parser.add_argument("--detector-engine", default="engines/yolo11n.engine")
     parser.add_argument("--out-dir", default="results")
     parser.add_argument("--save-pk", action="store_true")
     parser.add_argument("--save-img", action="store_true")

@@ -1,5 +1,0 @@
-model_files/*
-pretrained_models/*
-hybrik.onnx
-hybrik.engine
-__pycache__/

@@ -10,8 +10,8 @@ from tqdm import tqdm
 from torchvision import transforms as T
 from torchvision.models.detection import fasterrcnn_resnet50_fpn
 
-from hybrik_inference import Hybrik
-from pre_processings import bbox_xyxy2cs
+from utils.hybrik_inference import Hybrik
+from utils.pre_processings import bbox_xyxy2cs
 
 det_transform = T.Compose([T.ToTensor()])
 
