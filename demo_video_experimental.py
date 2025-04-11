@@ -59,19 +59,11 @@ class TRTInference:
                 self.output_dtypes.append(dtype)
 
     def __call__(self, input_tensor):
-        # Validate input shape
-        expected_shape = (1, 3, 256, 256)
-        if tuple(input_tensor.shape) != expected_shape:
-            raise ValueError(f"Input shape {input_tensor.shape} does not match expected {expected_shape}")
-
-        # Copy input to device
         input_np = input_tensor.cpu().numpy().astype(self.input_dtype)
         cuda.memcpy_htod_async(self.bindings[self.input_binding_index], input_np, self.stream)
 
-        # Execute inference
         self.context.execute_async_v2(bindings=[int(b) for b in self.bindings], stream_handle=self.stream.handle)
 
-        # Copy outputs from device
         outputs = []
         for idx, shape, dtype in zip(self.output_binding_indices, self.output_shapes, self.output_dtypes):
             out_np = np.empty(shape, dtype=dtype)
