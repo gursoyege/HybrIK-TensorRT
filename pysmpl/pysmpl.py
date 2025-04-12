@@ -1,6 +1,7 @@
 # This is originally taken from https://github.com/aoru45/marker_ik and modified.
 
 from .smpl.SMPL import SMPL_layer
+from pathlib import Path
 import numpy as np
 import torch
 import torch.nn as nn
@@ -11,12 +12,16 @@ import os
 class PySMPL(nn.Module):
     def __init__(self):
         super().__init__()
-        h36m_jregressor = np.load("model_files/smpl/J_regressor_h36m.npy")
-        wham_jregressor = np.load("model_files/smpl/J_regressor_wham.npy")
+        current_dir = Path(__file__).resolve().parent
+        model_dir = current_dir.parent / "model_files" / "smpl"
+        
+        h36m_jregressor = np.load(model_dir / "J_regressor_h36m.npy")
+        wham_jregressor = np.load(model_dir / "J_regressor_wham.npy")
+
         self.smpl_dtype = torch.float32  # Ensure we intend to use float32
         self.num_joints = 24
         self.smpl = SMPL_layer(
-            "model_files/smpl/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl",
+            model_dir / "basicModel_neutral_lbs_10_207_0_v1.0.0.pkl",
             h36m_jregressor=h36m_jregressor,
             wham_jregressor=wham_jregressor,
             dtype=self.smpl_dtype,
